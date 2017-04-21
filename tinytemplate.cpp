@@ -23,7 +23,7 @@ struct RenderState {
     {
         Output,
         Escape,
-        Variable,
+        Variable
     };
     State state;
     std::string output;

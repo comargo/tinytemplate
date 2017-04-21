@@ -4,16 +4,23 @@ include(PVS-Studio)
 
 set(BUILD_GMOCK OFF CACHE BOOL "Builds the googlemock subproject" FORCE)
 set(BUILD_GTEST ON CACHE BOOL "Builds the googletest subproject" FORCE)
+set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib." FORCE)
 
 add_subdirectory(googletest)
+if(MSVC_VERSION LESS 1800)
+    target_compile_definitions(gtest
+        PUBLIC GTEST_HAS_TR1_TUPLE=0)
+endif()
 
 set(${PROJECT_NAME}_SOURCES
 	tinytemplate_tests.cpp
 )
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
-target_compile_options(${PROJECT_NAME}
-    PRIVATE -Wall -pedantic -Wextra)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    target_compile_options(${PROJECT_NAME}
+        PRIVATE -Wall -pedantic -Wextra)
+endif()
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 target_link_libraries(${PROJECT_NAME} tinytemplate gtest_main)
 

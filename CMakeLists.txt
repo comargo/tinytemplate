@@ -13,8 +13,10 @@ set(${PROJECT_NAME}_SOURCES
 )
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
-target_compile_options(${PROJECT_NAME}
-    PRIVATE -Wall -pedantic -Wextra)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    target_compile_options(${PROJECT_NAME}
+        PRIVATE -Wall -pedantic -Wextra)
+endif()
 target_include_directories(${PROJECT_NAME}
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
